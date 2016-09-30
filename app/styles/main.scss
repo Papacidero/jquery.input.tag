@@ -2,8 +2,9 @@ $icon-font-path: '../fonts/';
 
 // bower:scss
 @import "bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+@import "../styles/jquery.tags.input.scss";
 // endbower
-@import "./jquery.tags.input.scss";
+
 
 .browserupgrade {
   margin: 0.2em 0;

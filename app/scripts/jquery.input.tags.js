@@ -1,7 +1,7 @@
 (function($) {
 
-  $.fn.jsInputTags = function(options) {
-
+  $.fn.jQueryInputTags = function(options) {
+    
     let consoleColors = {
       success: 'color: #5fba7d;  font-weight: bold',
       error: 'color: #f74f57; font-weight: bold',
@@ -129,6 +129,6 @@
     actions.init();
   };
 
-  $('.jsInputTags').jsInputTags();
+  $('.jQueryInputTags').jQueryInputTags();
 
 })(jQuery);
