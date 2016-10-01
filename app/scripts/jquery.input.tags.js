@@ -26,7 +26,7 @@
         actions.populate(this);
         actions.handlers(); // Start Handlers
       },
-
+      
       // Add and Delete Tag
       addTag: (targetInput, value, isPolulating) => {
         let tagList = actions.getTagList(targetInput);
@@ -51,18 +51,20 @@
 
 
           let tagList = actions.getTagList(targetInput);
+          
+          if (tagList.length) {
+            if (targetTag === 'last') {
+              tagList.pop();
+              console.log(`%c${targetTag} Tag Deleted`, consoleColors.error);
+            } else {
+              console.log(`%c${tagList[targetTag]} Tag Deleted`, consoleColors.error);
+              tagList.splice(targetTag, 1);
+            }
 
-          if (targetTag === 'last') {
-            tagList.pop();
-            console.log(`%c${targetTag} Tag Deleted`, consoleColors.error);
-          } else {
-            console.log(`%c${tagList[targetTag]} Tag Deleted`, consoleColors.error);
-            tagList.splice(targetTag, 1);
+            $(targetInput).find('input[type="hidden"]').val(tagList = tagList.toString());
+            $(targetInput).find('.tag').remove();
+            actions.populate(targetInput);
           }
-
-          $(targetInput).find('input[type="hidden"]').val(tagList = tagList.toString());
-          $(targetInput).find('.tag').remove();
-          actions.populate(targetInput);
 
         } else {
           $(targetInput).find('input[type="text"]').removeClass('duplicated');
@@ -89,6 +91,7 @@
       // Populate List
       populate: (targetInput) => {
         $(targetInput).each(function(index, el) {
+          console.log(`%cIs Populating... ${el.className}`, consoleColors.warning);
           $(el).find('input[type="text"]').attr('maxlength', `${options.maxTagSize}`);
           if ($(el).find('input[type="hidden"]').val().length) {
             let tagList = $(el).find('input[type="hidden"]').val().split(`${options.separator}`);
@@ -104,7 +107,6 @@
         $(this).on('keyup keydown', (e) => {
           var value = e.target.value;
           value = value.replace(/\s/g,'');
-          console.log(value);
 
           // Add new Tag
           if ((options.keycode.test(e.keyCode) || options.chars.test(value)) && value.length > options.minTagSize) {
