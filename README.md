@@ -2,7 +2,7 @@
 
 Simple jQuery Iput Tag, create to fit the requirements of a specific client project.
 
-[Demo Page](https://github.com/Papacidero/jquery.input.tag)
+[Demo Page](https://papacidero.github.io/jquery.input.tag/dist/)
 
 Html
 ```html
