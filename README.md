@@ -1,6 +1,6 @@
 # jQuery Input Tags
 
-Simple jQuery Iput Tag, create to fit the requirements of a specific client project.
+jQuery.input.tags is a jQuery Plugin that gives you the power of tags for your inputs, it was built over an client requirements, so the structure bellow is used to fit the client needs, but stills easy to use and understand. A further version will be available without unnecessary html code.
 
 [Demo Page](https://papacidero.github.io/jquery.input.tag/dist/)
 
