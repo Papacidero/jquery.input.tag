@@ -12,8 +12,8 @@
       maxTotalSize: 255,
       maxTagSize: 10,
       minTagSize: 3,
-      chars: /[,:]/,
-      keycode: /(^9$|^13$|^32)/, // Tab, Enter, Space
+      chars: /[:]/,
+      keycode: /(^9$|^13$)/, // Tab, Enter, Space
       separator: ',',
       allowSpaces: false
     };
