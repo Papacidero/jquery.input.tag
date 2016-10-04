@@ -45,29 +45,29 @@
 
           <div class="form-group">
             <label>Standard</label>
-            <div class="jQueryInputTags">
+            <div class="jQueryInputTags defaultOptions">
               <input type="text" placeholder="Type your tags here!">
               <input type="hidden">
             </div>
           </div>
 
-          <small>Sample:</small>
+          <small>Html</small>
           <pre>
 &lt;div <strong>class=&quot;jQueryInputTags&quot;</strong>&gt;
   &lt;input type=&quot;text&quot; placeholder=&quot;Type your tags here!&quot;&gt;
-  &lt;input type=&quot;hidden&quot; 
+  &lt;input type=&quot;hidden&quot;&gt;
 &lt;/div&gt;
           </pre>
 
           <div class="form-group">
             <label>Pre-populated Tags:</label>
-            <div class="jQueryInputTags">
+            <div class="jQueryInputTags defaultOptions">
               <input type="text" placeholder="Type your tags here!">
               <input type="hidden" value="Lorem,Ipsum,Dolor,Amet">
             </div>
           </div>
-
-          <small>Sample:</small>  
+        
+          <small>Html</small>  
           <pre>
   &lt;div <strong>class=&quot;jQueryInputTags&quot;</strong>&gt;
     &lt;input type=&quot;text&quot; placeholder=&quot;Type your tags here!&quot;&gt;
@@ -76,20 +76,44 @@
             </pre>
             
             <div class="form-group">
-              <label>Custom Attributes:</label>
-              <div class="jQueryInputTags">
+              <label>Custom Options:</label>
+              <div class="jQueryInputTags customOptions">
                 <input type="text" placeholder="Type your tags here!">
-                <input type="hidden" value="Lorem ,Ipsum,Dolor,Amet">
+                <input type="hidden" value="Lorem,Ipsum,Dolor,Amet">
               </div>
             </div>
 
-            <small>Sample:</small>  
+            <p>
+              You could set the options bellow:
+              
+              <pre>
+  - maxTotalSize 255
+  - maxTagSize 15
+  - minTagSize 3
+  - chars /[:,]/
+  - keycode: /(^9$|^13$)/
+              </pre>
+              
+            </p>            
+
+            <small>Html</small>  
             <pre>
     &lt;div <strong>class=&quot;jQueryInputTags&quot;</strong>&gt;
       &lt;input type=&quot;text&quot; placeholder=&quot;Type your tags here!&quot;&gt;
       &lt;input type=&quot;hidden&quot; <strong>value=&quot;Lorem,Ipsum,Dolor,Amet&quot;</strong>&gt;  
     &lt;/div&gt;
-              </pre>            
+              </pre>         
+
+              <small>Javscript</small>  
+              <pre>
+$('.customOptions').jQueryInputTags({
+  maxTotalSize: 100,
+  maxTagSize: 15,
+  minTagSize: 1,
+  chars: /[!:,]/
+});              
+              </pre>        
+ 
         </div>
 
       </div>
@@ -122,8 +146,22 @@
   <!-- endbuild -->
 
   <!-- build:js scripts/main.js -->
-  <script src="scripts/main.js"></script>
+  <script src="scripts/main.js"></script>  
   <script src="scripts/jquery.input.tags.js"></script>
   <!-- endbuild -->
+  
+
+  
+  <script type="text/javascript">
+    $('.defaultOptions').jQueryInputTags();
+    $('.customOptions').jQueryInputTags({
+      maxTotalSize: 100,
+      maxTagSize: 15,
+      minTagSize: 1,
+      chars: /[!:,]/
+    });
+  </script>
+  
+  
 </body>
 </html>

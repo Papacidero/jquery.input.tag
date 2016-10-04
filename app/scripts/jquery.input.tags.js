@@ -1,7 +1,7 @@
 (function($) {
 
   $.fn.jQueryInputTags = function(options) {
-
+    
     let consoleColors = {
       success: 'color: #5fba7d;  font-weight: bold',
       error: 'color: #f74f57; font-weight: bold',
@@ -10,12 +10,11 @@
 
     let defaults = {
       maxTotalSize: 255,
-      maxTagSize: 100,
+      maxTagSize: 15,
       minTagSize: 3,
       chars: /[:,]/,
       keycode: /(^9$|^13$)/, // Tab, Enter, Space
       separator: ',',
-      allowSpaces: false
     };
 
     var options = $.extend({}, defaults, options);
@@ -31,13 +30,10 @@
       addTag: (targetInput, value) => {
         
         let tagList = actions.getTagList(targetInput);
-        
-        $(targetInput).find('input[type="text"]').val(''); 
-        
+        $(targetInput).find('input[type="text"]').val('');
         actions.addTagListItem(targetInput, value);
-
         $(targetInput).find('.tag').remove(); // Clean Tags
-        
+
         try {
           actions.getTagList(targetInput).forEach((item, index) => { // Create Tags
             $(targetInput).append(`<div class="tag" data-tag-value="${item}">${item}<div class="delete" data-tag-value="${item}">+</div></div>`);
@@ -45,8 +41,6 @@
         } catch (e) {
           console.log(`%cEmpty, ${e}`, consoleColors.error);
         }
-        
-        console.log(`%c${value} Tag Added`, consoleColors.success);
 
       },
       deleteTag: (targetInput, targetTag) => {
@@ -72,47 +66,31 @@
         }
       },
 
-      // isDuplicated: (tagList, value) => {
-      //   return tagList.filter((item) => {
-      //     return item === `${value}`;
-      //   });
-      // },
-
       // List Items Manipulation
       addTagListItem: (targetInput, value) => {
-        
-        var actualValue = $(targetInput).find('input[type="hidden"]').val().split(options.chars);
-        
-        if (actualValue[0] === '') {
-          actualValue.splice(0,1);
-        }
-        var actualValueSet;
-        
+
+        var actualValue = new Set($(targetInput).find('input[type="hidden"]').val().split(options.separator));
+
         value.split(options.chars).forEach((item, index) => {
           if (item.length > options.minTagSize && item.length <= options.maxTagSize) {
-            
             //Check if MaxLenght has reachead
-            let tempActualValueSet = new Set(actualValue);
-            tempActualValueSet.add(item);
-            if ([...tempActualValueSet].toString().length <= options.maxTotalSize) {
-              actualValue.push(item);
-            } else {
-              console.log(`%cThe Max Length of ${options.maxTotalSize} chars has reached`, consoleColors.error);
+            actualValue.add(item);
+            console.log(`%c${item} Tag Added`, consoleColors.success);
+            if ([...actualValue].toString().length >= options.maxTotalSize) {
+              console.log(`%cMax chars limit of ${options.maxTotalSize} reached, total text size is ${[...actualValue].toString().length}`, consoleColors.error);
+              actualValue.delete(item);
             }
-            
           }
         });
-        actualValueSet = new Set(actualValue);
+
+        $(targetInput).find('input[type="hidden"]').val([...actualValue].toString());
         
-        
-        
-        $(targetInput).find('input[type="hidden"]').val([...actualValueSet].toString());
 
       },
       getTagList: (targetInput) => {
         var tagList = $(targetInput).find('input[type="hidden"]').val().length ? $(targetInput).find('input[type="hidden"]').val().split(`${options.separator}`) : '';
         if (tagList[0] === '') {
-          tagList.splice(0,1);
+          tagList.splice(0, 1);
         }
         return tagList;
       },
@@ -122,7 +100,7 @@
         $(targetInput).each(function(index, el) {
           console.log(`%cIs Populating... ${el.className}`, consoleColors.warning);
           if ($(el).find('input[type="hidden"]').val().length) {
-              actions.addTag(el, actions.getTagList(el).toString());
+            actions.addTag(el, actions.getTagList(el).toString());
           }
         });
       },
@@ -139,6 +117,7 @@
         });
         $(this).on('keyup', (e) => {
           var value = e.target.value;
+          
           // Remove Tag
           if (e.keyCode === 8 && value.length === 0) {
             actions.deleteTag(e.currentTarget, 'last');
@@ -151,9 +130,9 @@
         });
       }
     };
+    
     actions.init();
+  
   };
-
-  $('.jQueryInputTags').jQueryInputTags();
 
 })(jQuery);
