@@ -1,3 +1,6 @@
+// jQuery Input Tag v.1.0.0
+// https://github.com/Papacidero/jquery.input.tag/
+
 (function($) {
 
   $.fn.jQueryInputTags = function(options) {
