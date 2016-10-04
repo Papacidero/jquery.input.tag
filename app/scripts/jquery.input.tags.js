@@ -90,7 +90,16 @@
         
         value.split(options.chars).forEach((item, index) => {
           if (item.length > options.minTagSize && item.length <= options.maxTagSize) {
-            actualValue.push(item);
+            
+            //Check if MaxLenght has reachead
+            let tempActualValueSet = new Set(actualValue);
+            tempActualValueSet.add(item);
+            if ([...tempActualValueSet].toString().length <= options.maxTotalSize) {
+              actualValue.push(item);
+            } else {
+              console.log(`%cThe Max Length of ${options.maxTotalSize} chars has reached`, consoleColors.error);
+            }
+            
           }
         });
         actualValueSet = new Set(actualValue);
