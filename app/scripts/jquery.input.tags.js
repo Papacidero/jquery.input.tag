@@ -4,7 +4,7 @@
 (function($) {
 
   $.fn.jQueryInputTags = function(options) {
-    
+
     let consoleColors = {
       success: 'color: #5fba7d;  font-weight: bold',
       error: 'color: #f74f57; font-weight: bold',
@@ -31,18 +31,15 @@
 
       // Add and Delete Tag
       addTag: (targetInput, value) => {
-        
-        let tagList = actions.getTagList(targetInput);
+
         $(targetInput).find('input[type="text"]').val('');
-        actions.addTagListItem(targetInput, value);
+        actions.updateTagList(targetInput, value);
         $(targetInput).find('.tag').remove(); // Clean Tags
 
-        try {
+        if (actions.getTagList(targetInput).length) {
           actions.getTagList(targetInput).forEach((item, index) => { // Create Tags
             $(targetInput).append(`<div class="tag" data-tag-value="${item}">${item}<div class="delete" data-tag-value="${item}">+</div></div>`);
           });
-        } catch (e) {
-          console.log(`%cEmpty, ${e}`, consoleColors.error);
         }
 
       },
@@ -70,28 +67,40 @@
       },
 
       // List Items Manipulation
-      addTagListItem: (targetInput, value) => {
+      updateTagList: (targetInput, value) => {
 
         var actualValue = new Set($(targetInput).find('input[type="hidden"]').val().split(options.separator));
+        
+        if (actualValue.has('')) actualValue.delete('');
 
         value.split(options.chars).forEach((item, index) => {
           if (item.length > options.minTagSize && item.length <= options.maxTagSize) {
+
+            // Check if is duplicated
+            if (actualValue.has(item)) {
+              console.log(`%c${item} tag already exists`, consoleColors.warning);
+            } else {
+              actualValue.add(item);
+              console.log(`%c${item} Tag Added`, consoleColors.success);
+            }
+
             //Check if MaxLenght has reachead
-            actualValue.add(item);
-            console.log(`%c${item} Tag Added`, consoleColors.success);
             if ([...actualValue].toString().length >= options.maxTotalSize) {
               console.log(`%cMax chars limit of ${options.maxTotalSize} reached, total text size is ${[...actualValue].toString().length}`, consoleColors.error);
               actualValue.delete(item);
             }
+
           }
         });
 
         $(targetInput).find('input[type="hidden"]').val([...actualValue].toString());
-        
+
 
       },
       getTagList: (targetInput) => {
+
         var tagList = $(targetInput).find('input[type="hidden"]').val().length ? $(targetInput).find('input[type="hidden"]').val().split(`${options.separator}`) : '';
+
         if (tagList[0] === '') {
           tagList.splice(0, 1);
         }
@@ -120,7 +129,7 @@
         });
         $(this).on('keyup', (e) => {
           var value = e.target.value;
-          
+
           // Remove Tag
           if (e.keyCode === 8 && value.length === 0) {
             actions.deleteTag(e.currentTarget, 'last');
@@ -133,9 +142,9 @@
         });
       }
     };
-    
+
     actions.init();
-  
+
   };
 
 })(jQuery);
