@@ -13,11 +13,13 @@
 
     let defaults = {
       maxTotalSize: 255,
-      maxTagSize: 15,
-      minTagSize: 3,
+      maxTagSize: 255,
+      minTagSize: 1,
       chars: /[:,]/,
       keycode: /(^9$|^13$)/, // Tab, Enter, Space
       separator: ',',
+      sensitive: false,
+      clearSpaces: true
     };
 
     var options = $.extend({}, defaults, options);
@@ -31,6 +33,8 @@
 
       // Add and Delete Tag
       addTag: (targetInput, value) => {
+
+        if (options.clearSpaces) value = value.replace(/^\s+/, '').replace(/\s+/g, ' ');
 
         $(targetInput).find('input[type="text"]').val('');
         actions.updateTagList(targetInput, value);
@@ -70,14 +74,17 @@
       updateTagList: (targetInput, value) => {
 
         var actualValue = new Set($(targetInput).find('input[type="hidden"]').val().split(options.separator));
-        
+        if (options.sensitive === false) var unsensitiveActualValue = new Set($(targetInput).find('input[type="hidden"]').val().toLowerCase().split(options.separator));
+
         if (actualValue.has('')) actualValue.delete('');
 
         value.split(options.chars).forEach((item, index) => {
-          if (item.length > options.minTagSize && item.length <= options.maxTagSize) {
+          if (item.length >= options.minTagSize && item.length <= options.maxTagSize) {
 
             // Check if is duplicated
-            if (actualValue.has(item)) {
+            if (options.sensitive === false && unsensitiveActualValue.has(item.toLowerCase())) {
+              console.log(`%c${item} tag already exists`, consoleColors.warning);
+            } else if (actualValue.has(item)) {
               console.log(`%c${item} tag already exists`, consoleColors.warning);
             } else {
               actualValue.add(item);
@@ -123,7 +130,7 @@
           var value = e.target.value;
 
           // Add new Tag
-          if ((options.keycode.test(e.keyCode) || options.chars.test(value)) && value.length > options.minTagSize) {
+          if ((options.keycode.test(e.keyCode) || options.chars.test(value)) && value.length >= options.minTagSize) {
             actions.addTag(e.currentTarget, value);
           }
         });

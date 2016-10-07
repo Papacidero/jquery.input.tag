@@ -92,6 +92,9 @@
   - minTagSize 3
   - chars /[:,]/
   - keycode: /(^9$|^13$)/
+  - separator: ',',
+  - sensitive: false,
+  - clearSpaces: true
               </pre>
               
             </p>            
@@ -158,7 +161,7 @@ $('.customOptions').jQueryInputTags({
       maxTotalSize: 100,
       maxTagSize: 15,
       minTagSize: 1,
-      chars: /[!:,]/
+      chars: /[!:,]/,
     });
   </script>
   

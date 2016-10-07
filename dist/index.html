@@ -14,6 +14,9 @@
   - minTagSize 3
   - chars /[:,]/
   - keycode: /(^9$|^13$)/
+  - separator: ',',
+  - sensitive: false,
+  - clearSpaces: true
               </pre></p><small>Html</small><pre>
     &lt;div <strong>class=&quot;jQueryInputTags&quot;</strong>&gt;
       &lt;input type=&quot;text&quot; placeholder=&quot;Type your tags here!&quot;&gt;
@@ -31,5 +34,5 @@ $('.customOptions').jQueryInputTags({
       maxTotalSize: 100,
       maxTagSize: 15,
       minTagSize: 1,
-      chars: /[!:,]/
+      chars: /[!:,]/,
     });</script></body></html>
