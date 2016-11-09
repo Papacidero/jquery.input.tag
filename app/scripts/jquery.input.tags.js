@@ -126,13 +126,20 @@
 
       // Event Handlers
       handlers: () => {
-        $(this).on('keyup keydown', (e) => {
+        $(this).on('keyup keydown focusout', (e) => {
           var value = e.target.value;
 
+          console.log(e);
+
           // Add new Tag
-          if ((options.keycode.test(e.keyCode) || options.chars.test(value)) && value.length >= options.minTagSize) {
+          if ((options.keycode.test(e.keyCode) || options.chars.test(value) || e.type === 'focusout') && value.length >= options.minTagSize) {
             actions.addTag(e.currentTarget, value);
           }
+
+          // Prevent tab from changing filters if not adding a new tag
+          if (e.keyCode === 9 && value.length >= 1) {
+           e.preventDefault();
+         }
         });
         $(this).on('keyup', (e) => {
           var value = e.target.value;
