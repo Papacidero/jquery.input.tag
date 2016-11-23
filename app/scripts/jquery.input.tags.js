@@ -141,7 +141,7 @@
            e.preventDefault();
          }
         });
-        $(this).on('keyup', (e) => {
+        $(this).on('keydown', (e) => {
           var value = e.target.value;
 
           // Remove Tag
