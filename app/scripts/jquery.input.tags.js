@@ -126,8 +126,6 @@
 
       // Event Handlers
       handlers: () => {
-        $(this).find('input[type="text"]').attr('maxlength', options.maxTagSize)
-
         $(this).on('keyup keydown focusout', (e) => {
           var value = e.target.value;
 
