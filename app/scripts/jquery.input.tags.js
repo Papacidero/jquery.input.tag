@@ -126,13 +126,15 @@
 
       // Event Handlers
       handlers: () => {
+        $(this).find('input[type="text"]').attr('maxlength', options.maxTagSize)
+
         $(this).on('keyup keydown focusout', (e) => {
           var value = e.target.value;
 
           console.log(e);
 
           // Add new Tag
-          if ((options.keycode.test(e.keyCode) || options.chars.test(value) || e.type === 'focusout') && value.length >= options.minTagSize) {
+          if (((options.keycode.test(e.keyCode) || options.chars.test(value) || e.type === 'focusout') && value.length >= options.minTagSize) || value.length >= options.maxTagSize) {
             actions.addTag(e.currentTarget, value);
           }
 
