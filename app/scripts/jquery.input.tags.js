@@ -5,6 +5,10 @@
 
   $.fn.jQueryInputTags = function(options) {
 
+		if (options.prepareTag) {
+			options.prepareTag = window[options.prepareTag] || function () {};
+		}
+
     let consoleColors = {
       success: 'color: #5fba7d;  font-weight: bold',
       error: 'color: #f74f57; font-weight: bold',
@@ -27,8 +31,20 @@
     var actions = {
 
       init: () => {
-        actions.populate(this);
         actions.handlers(); // Start Handlers
+        actions.populate(this, true);
+      },
+
+      display: (targetInput) => {
+        $(targetInput).find('.tag').remove(); // Clean Tags
+
+        if (actions.getTagList(targetInput).length) {
+          actions.getTagList(targetInput).forEach((item, index) => { // Create Tags
+						var tag = $(`<div class="tag" data-tag-value="${item}">${item}<div class="delete" data-tag-value="${item}">+</div></div>`);
+						options.prepareTag(tag, item, index);
+            $(targetInput).append(tag);
+          });
+        }
       },
 
       // Add and Delete Tag
@@ -38,14 +54,6 @@
 
         $(targetInput).find('input[type="text"]').val('');
         actions.updateTagList(targetInput, value);
-        $(targetInput).find('.tag').remove(); // Clean Tags
-
-        if (actions.getTagList(targetInput).length) {
-          actions.getTagList(targetInput).forEach((item, index) => { // Create Tags
-            $(targetInput).append(`<div class="tag" data-tag-value="${item}">${item}<div class="delete" data-tag-value="${item}">+</div></div>`);
-          });
-        }
-
       },
       deleteTag: (targetInput, targetTag) => {
         if (!$(targetInput).find('input[type="text"]').hasClass('duplicated')) {
@@ -99,10 +107,7 @@
 
           }
         });
-
-        $(targetInput).find('input[type="hidden"]').val([...actualValue].toString());
-
-
+        $(targetInput).find('input[type="hidden"]').val([...actualValue].toString()).trigger('change');
       },
       getTagList: (targetInput) => {
 
@@ -115,11 +120,12 @@
       },
 
       // Populate List
-      populate: (targetInput) => {
+      populate: (targetInput, init) => {
         $(targetInput).each(function(index, el) {
           console.log(`%cIs Populating... ${el.className}`, consoleColors.warning);
-          if ($(el).find('input[type="hidden"]').val().length) {
-            actions.addTag(el, actions.getTagList(el).toString());
+          var hidden = $(el).find('input[type="hidden"]');
+          if (!init || hidden.val().length) {
+            hidden.trigger('change');
           }
         });
       },
@@ -128,8 +134,6 @@
       handlers: () => {
         $(this).on('keyup keydown focusout', (e) => {
           var value = e.target.value;
-
-          console.log(e);
 
           // Add new Tag
           if (((options.keycode.test(e.keyCode) || options.chars.test(value) || e.type === 'focusout') && value.length >= options.minTagSize) || value.length >= options.maxTagSize) {
@@ -153,6 +157,12 @@
           if ($(e.target).hasClass('delete')) {
             actions.deleteTag(e.currentTarget, $(e.target).parent('.tag').index() - 2);
           }
+        });
+        $(this).on('change', '[type="hidden"]', (e) => {
+          actions.display(this);
+        });
+        $(this).on('update.jQueryInputTags', (e) => {
+          actions.display(this)
         });
       }
     };
