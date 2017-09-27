@@ -1,5 +1,6 @@
 {
   "name": "jquery-input-tag",
+  "version": "1.0.0",
   "private": true,
   "engines": {
     "node": ">=4"
